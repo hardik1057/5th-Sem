@@ -1,61 +1,69 @@
-// convert max heap to min heap anf vice versa
-// C program to convert min Heap to max Heap
-
 #include <stdio.h>
-
+#include <stdlib.h>
 void swap(int *a, int *b)
 {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
-
-// to heapify a subtree with root at given index
-void MaxHeapify(int arr[], int i, int N)
+void maxToMinHeap(int arr[], int n)
 {
-    int l = 2 * i + 1;
-    int r = 2 * i + 2;
-    int largest = i;
-
-    if (l < N && arr[l] > arr[i])
-        largest = l;
-    if (r < N && arr[r] > arr[largest])
-        largest = r;
-    if (largest != i)
+    for (int i = n / 2 - 1; i >= 0; i--)
     {
-        swap(&arr[i], &arr[largest]);
-        MaxHeapify(arr, largest, N);
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left < n && arr[left] < arr[smallest])
+            smallest = left;
+        if (right < n && arr[right] < arr[smallest])
+            smallest = right;
+        if (smallest != i)
+        {
+            swap(&arr[i], &arr[smallest]);
+            maxToMinHeap(arr, n);
+        }
     }
 }
-
-// This function basically builds max heap
-void convertMaxHeap(int arr[], int N)
+void minToMaxHeap(int arr[], int n)
 {
-    // Start from bottommost and rightmost
-    // internal node and heapify all internal
-    // nodes in bottom up way
-    for (int i = (N - 2) / 2; i >= 0; --i)
-        MaxHeapify(arr, i, N);
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+        if (largest != i)
+        {
+            swap(&arr[i], &arr[largest]);
+            minToMaxHeap(arr, n);
+        }
+    }
 }
-
-// A utility function to print a given array
-// of given size
-void printArray(int *arr, int size)
+void printArray(int arr[], int n)
 {
-    for (int i = 0; i < size; ++i)
+    for (int i = 0; i < n; i++)
         printf("%d ", arr[i]);
+    printf("\n");
 }
 
-// Driver's code
 int main()
 {
-    // array representing Min Heap
-    int arr[] = {3, 5, 9, 6, 8, 20, 10, 12, 18, 9};
-    int N = sizeof(arr) / sizeof(arr[0]);
-    printf("Min Heap array : ");
-    printArray(arr, N);
-    convertMaxHeap(arr, N);
-    printf("\nMax Heap array : ");
-    printArray(arr, N);
+    int maxHeap[] = {9, 7, 6, 5, 3, 1};
+    int minHeap[] = {1, 3, 2, 7, 5, 8};
+    int n = sizeof(maxHeap) / sizeof(maxHeap[0]);
+    printf("Max Heap:");
+    printArray(maxHeap, n);
+    maxToMinHeap(maxHeap, n);
+    printf("Max Heap Converted to Min Heap: ");
+    printArray(maxHeap, n);
+    printf("\n");
+    printf("Min Heap:");
+    printArray(minHeap, n);
+    minToMaxHeap(minHeap, n);
+    printf("Min Heap Converted To Max Heap: ");
+    printArray(minHeap, n);
     return 0;
 }
